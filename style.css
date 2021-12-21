@@ -1,7 +1,13 @@
-button { 
+.addButton { 
     color:#050; 
     font: old 84% 'trebuchet ms',helvetica,sans-serif; 
     background-color:#fed; 
     border:1px solid; 
     border-color: #696 #363 #363 #696; 
+    border-radius: "10px"
+}
+
+
+.parties {
+    font-size: 12px;
 }

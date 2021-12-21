@@ -3,7 +3,7 @@ fetch(allCandidates)
   .then((response) => response.json())
   .then((candidates) => {
     for (let i = 0; i < candidates.length; i++) {
-      const candidateDiv = document.getElementById("candidateList");
+      const candidateDiv = document.querySelector(".candidateList");
 
       let candidateName = candidates[i].name;
       let candidateParty = candidates[i].party;
@@ -11,23 +11,32 @@ fetch(allCandidates)
       const partyDiv = document.createElement("p");
       const nameDiv = document.createElement("h5");
 
+      const editButton = document.createElement("BUTTON")
       const deleteButton = document.createElement("BUTTON");
-      deleteButton.innerHTML = "Delete";
+
+      editButton.addEventListener("click", function () {
+      editCandidate();
+      alert("candidate edited successfully");
+      });
 
       deleteButton.addEventListener("click", function () {
         deleteCandidate(candidates[i].id);
         alert("Candidate deleted");
       });
 
+      editButton.innerHTML = "Edit"
+      deleteButton.innerHTML = "Delete";
       nameDiv.innerHTML = candidateName;
       partyDiv.innerHTML = candidateParty;
 
       candidateDiv.appendChild(nameDiv);
       candidateDiv.appendChild(partyDiv);
       candidateDiv.appendChild(deleteButton);
+      candidateDiv.appendChild(editButton);
     }
   });
 
+  
 const addUrl = "http://localhost:8080/api/candidate";
 
 function addCandidate(municipality, name, party, zip) {
@@ -77,8 +86,37 @@ function deleteCandidate(id) {
   fetch("http://localhost:8080/api/candidate/" + id, {
     method: "DELETE",
   })
-    .then((res) => res.text()) // or res.json()
+    .then((res) => res.json())
     .then((res) => console.log(res));
 }
 
 
+
+const displayVoteCount = (party) => {
+  
+  fetch("http://localhost:8080/api/candidate/" + party+"/votecount")
+    .then((response) => response.json())
+    .then((votecount) => { 
+
+      let votes = votecount
+
+      const partyVotesDiv = document.querySelector(".partyVotes")
+      
+      const partyName = document.createElement("h6");
+      const partyVotes = document.createElement("p");
+  
+      partyName.innerHTML = party;
+      partyVotes.innerHTML = votes;
+
+      partyVotesDiv.appendChild(partyName);
+      partyVotesDiv.appendChild(partyVotes);
+      
+      
+    });
+    
+
+
+}
+displayVoteCount("Socialdemokratiet");
+displayVoteCount("Det konservative Folkeparti")
+displayVoteCount("Venstre")
